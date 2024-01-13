@@ -41,7 +41,7 @@
         public bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle == null) return false;
-            String vehicleType = vehicle.GetVehicleType();
+            string vehicleType = vehicle.GetVehicleType();
             return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
                    vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
                    vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||
@@ -69,7 +69,7 @@
             else return 0;
         }
 
-        public Boolean IsTollFreeDate(DateTime date)
+        public bool IsTollFreeDate(DateTime date)
         {
             int year = date.Year;
             int month = date.Month;
