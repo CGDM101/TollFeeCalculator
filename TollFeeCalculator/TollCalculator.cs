@@ -38,7 +38,7 @@
             return totalFee;
         }
 
-        private bool IsTollFreeVehicle(Vehicle vehicle)
+        public bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle == null) return false;
             String vehicleType = vehicle.GetVehicleType();
@@ -69,7 +69,7 @@
             else return 0;
         }
 
-        private Boolean IsTollFreeDate(DateTime date)
+        public Boolean IsTollFreeDate(DateTime date)
         {
             int year = date.Year;
             int month = date.Month;
