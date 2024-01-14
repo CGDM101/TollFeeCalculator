@@ -2,7 +2,6 @@
 {
     public class TollCalculator
     {
-
         /**
          * Calculate the total toll fee for one day
          *
@@ -11,6 +10,12 @@
          * @return - the total toll fee for that day
          */
 
+        /// <summary>
+        /// Calculates total toll fee for one vehicle for one day.
+        /// </summary>
+        /// <param name="vehicle">The vehicle that passes.</param>
+        /// <param name="dates">The datetime(-s) the vehicle passes</param>
+        /// <returns>An int representing the total toll fee for a vehicle that day.</returns>
         public int GetTollFee(Vehicle vehicle, DateTime[] dates)
         {
             DateTime intervalStart = dates[0];
@@ -38,6 +43,11 @@
             return totalFee;
         }
 
+        /// <summary>
+        /// Evaluates if a vehicle is toll free.
+        /// </summary>
+        /// <param name="vehicle">The vehicle to be evaluated.</param>
+        /// <returns>True or false depending on whether the vehicle is toll free.</returns>
         public bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle == null) return false;
@@ -50,6 +60,12 @@
                    vehicleType.Equals(TollFreeVehicles.Military.ToString());
         }
 
+        /// <summary>
+        /// Calculates tariff depending on what time the vehicle passes.
+        /// </summary>
+        /// <param name="date">The time the vehicle passes.</param>
+        /// <param name="vehicle">The vehicle that passes.</param>
+        /// <returns>An int representing the tariff in SEK for that specific time.</returns>
         public int GetTollFee(DateTime date, Vehicle vehicle)
         {
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle)) return 0;
@@ -68,7 +84,12 @@
             else if (hour == 18 && minute >= 0 && minute <= 29) return 8;
             else return 0;
         }
-
+      
+        /// <summary>
+        /// Evaluates if a date is a tollfree date.
+        /// </summary>
+        /// <param name="date">The date to be evaluated.</param>
+        /// <returns>True or false depending on whether the date is toll free.</returns>
         public bool IsTollFreeDate(DateTime date)
         {
             int year = date.Year;
