@@ -51,7 +51,7 @@
         public bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle == null) return false;
-            String vehicleType = vehicle.GetVehicleType();
+            string vehicleType = vehicle.GetVehicleType();
             return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
                    vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
                    vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||
@@ -84,13 +84,13 @@
             else if (hour == 18 && minute >= 0 && minute <= 29) return 8;
             else return 0;
         }
-
+      
         /// <summary>
         /// Evaluates if a date is a tollfree date.
         /// </summary>
         /// <param name="date">The date to be evaluated.</param>
         /// <returns>True or false depending on whether the date is toll free.</returns>
-        public Boolean IsTollFreeDate(DateTime date)
+        public bool IsTollFreeDate(DateTime date)
         {
             int year = date.Year;
             int month = date.Month;
