@@ -2,6 +2,6 @@
 {
     public interface Vehicle
     {
-        string GetVehicleType();
+        public bool IsTollFree { get; set; }
     }
 }

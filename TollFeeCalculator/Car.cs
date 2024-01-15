@@ -2,9 +2,6 @@
 {
     public class Car : Vehicle
     {
-        public string GetVehicleType()
-        {
-            return "Car";
-        }
+        public bool IsTollFree { get; set; } = false;
     }
 }

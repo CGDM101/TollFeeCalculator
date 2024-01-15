@@ -165,7 +165,6 @@ namespace UnitTests
         #endregion IsTollFreeDate-tester
 
         #region IsTollFreeVehicle-tester
-        // OBS: IsTollFreeVehicle() är egentligen private!
         [Fact]
         public void Test_IsTollFreeVehicle_WithMotorbike()
         {
@@ -240,24 +239,6 @@ namespace UnitTests
         #endregion GetTollFee(date, vehicle)-tester
 
         #region Random tests
-        [Fact]
-        public void GetVehicleTypeForCarWorks()
-        {
-            var actual = car.GetVehicleType();
-            var expected = "Car";
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Fact]
-        public void GetVehicleTypeForMcWorks()
-        {
-            var actual = mc.GetVehicleType();
-            var expected = "Motorbike";
-
-            Assert.Equal(expected, actual);
-        }
-
         [Fact]
         public void MotorbikeShouldAlwaysCost0SEK()
         {

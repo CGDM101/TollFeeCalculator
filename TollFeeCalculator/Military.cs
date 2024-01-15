@@ -1,6 +1,6 @@
 ﻿namespace TollFeeCalculator
 {
-    public class Motorbike : Vehicle
+    public class Military : Vehicle
     {
         public bool IsTollFree { get; set; } = true;
     }
