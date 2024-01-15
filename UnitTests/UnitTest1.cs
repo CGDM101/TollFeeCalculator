@@ -1,9 +1,58 @@
-using System.Linq;
 using TollFeeCalculator;
-using Xunit;
 
 namespace UnitTests
 {
+    public class HolidayTests
+    {
+        TollCalculator calculator = new TollCalculator();
+        Car car = new Car();
+
+        /// <summary>
+        /// These holidays always falls on these months and days. Dates are chosen for being regular weekdays, had it not been for the holiday that year.
+        /// </summary>
+        [Fact]
+        public void FixedHolidyaDatesShouldAlwaysCost0SEK()
+        {
+            var newYearsDay = new DateTime(2019, 1, 1); // a tuesday
+            var valborg = new DateTime(2019, 04, 30); // a tuesday
+            var labourDay = new DateTime(2019, 05, 01); // a wednesday
+            var nationalDay = new DateTime(2019, 06, 05); // a thursday
+            var christmas = new DateTime(2019, 12, 24); // a tuesday
+            var christmasDay = new DateTime(2019, 12, 25); // a wednesday
+            var boxingDay = new DateTime(2019, 12, 26); // a thursday
+            var newYearsEve = new DateTime(2019, 12, 31); // a tuesday
+
+            var dates = new DateTime[] { newYearsDay, valborg, labourDay, nationalDay, christmas, christmasDay, boxingDay, newYearsEve };
+
+            var expected = 0;
+            var actual = calculator.GetTollFee(car, dates);
+            Assert.Equal(expected, actual);
+        }
+        // TODO: Holidays with no fixed dates: Epiphany, Good Friday, Easter Monday (Easter Eve and Easter Day are already a Saturday and Sunday so they will always cost 0SEK), Midsummer's Eve, Midsummer's Day, Ascension Day, All Saint's Day)
+
+        [Fact]
+        public void JulyShouldCost0SEK()
+        {
+            var julyDate1 = new DateTime(2024, 07, 01);
+            var julyDate2 = new DateTime(2024, 07, 02);
+            var list = new DateTime[] { julyDate1, julyDate2 };
+            var expected = 0;
+            var actual = calculator.GetTollFee(car, list);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void WeekendDatesShouldCost0SEK()
+        {
+            var saturday = new DateTime(2024, 01, 13);
+            var sunday = new DateTime(2024, 01, 14);
+            var list = new DateTime[] { saturday, sunday };
+            var expected = 0;
+            var actual = calculator.GetTollFee(car, list);
+            Assert.Equal(expected, actual);
+        }
+    }
+
     /// <summary>
     /// Tests that a non-tollfree vehicle will never have to pay >60SEk for one hour, regardless of number of times it passes the toll.
     /// </summary>
@@ -11,6 +60,7 @@ namespace UnitTests
     {
         // CONCLUSION FOR THESE TESTS: The calculation for when a non toll-free vehicle tollfee is above 60SEK, does not work correctly. It seems as if only one of the passings count...
         // Further, the last test has data for when two different tariffs exist during on hour (for example when the vehicle has passes betwen 6.30-7.30), in that case some calculation seems to take place, but with the sum 23 which is unreasonable because no combination of tariffs results in a sum of 23. However, sometimes the "sum" is 13 or 18, depending on the order of the dates in the list...
+        // ADDITION: I might have read the requirements badly; the calculator should always count only one (the most expensive) passing...
 
         TollCalculator calculator = new TollCalculator();
         Car car = new Car();
