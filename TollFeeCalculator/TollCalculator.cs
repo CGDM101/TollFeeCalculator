@@ -57,26 +57,26 @@
         /// <summary>
         /// Calculates tariff depending on what time the vehicle passes.
         /// </summary>
-        /// <param name="date">The time the vehicle passes.</param>
+        /// <param name="time">The time the vehicle passes.</param>
         /// <param name="vehicle">The vehicle that passes.</param>
         /// <returns>An int representing the tariff in SEK for that specific time.</returns>
-        public int GetTollFee(DateTime date, Vehicle vehicle)
+        public int GetTollFee(DateTime time, Vehicle vehicle)
         {
-            if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle)) return 0;
+            if (IsTollFreeDate(time) || IsTollFreeVehicle(vehicle)) return (int)Tariffs.Free;
 
-            int hour = date.Hour;
-            int minute = date.Minute;
+            int hour = time.Hour;
+            int minute = time.Minute;
 
-            if (hour == 6 && minute >= 0 && minute <= 29) return 8;
-            else if (hour == 6 && minute >= 30 && minute <= 59) return 13;
-            else if (hour == 7 && minute >= 0 && minute <= 59) return 18;
-            else if (hour == 8 && minute >= 0 && minute <= 29) return 13;
-            else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return 8;
-            else if (hour == 15 && minute >= 0 && minute <= 29) return 13;
-            else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return 18;
-            else if (hour == 17 && minute >= 0 && minute <= 59) return 13;
-            else if (hour == 18 && minute >= 0 && minute <= 29) return 8;
-            else return 0;
+            if (hour == 6 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
+            else if (hour == 6 && minute >= 30 && minute <= 59) return (int)Tariffs.Medium;
+            else if (hour == 7 && minute >= 0 && minute <= 59) return (int)Tariffs.High;
+            else if (hour == 8 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
+            else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return (int)Tariffs.Low;
+            else if (hour == 15 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
+            else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return (int)Tariffs.High;
+            else if (hour == 17 && minute >= 0 && minute <= 59) return (int)Tariffs.Medium;
+            else if (hour == 18 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
+            else return (int)Tariffs.Free;
         }
 
         /// <summary>
