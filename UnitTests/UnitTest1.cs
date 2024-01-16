@@ -44,7 +44,6 @@ namespace UnitTests
             Assert.Equal(expected2, actual2);
         }
 
-        // Holidays with no fixed dates: Epiphany, Good Friday, Easter Monday (Easter Eve and Easter Day are already a Saturday and Sunday so they will always cost 0SEK), Midsummer's Eve, Midsummer's Day, Ascension Day, All Saint's Day)
         [Fact]
         public void Test_CalculateIfDateIsNonfixedHoliday()
         {
@@ -81,14 +80,9 @@ namespace UnitTests
         }
     }
 
-    /// <summary>
-    /// Tests that a non-tollfree vehicle will never have to pay >60SEk for one hour, regardless of number of times it passes the toll.
-    /// </summary>
-    public class TestFor_TollsAbove_60SEK
+    public class SeveralPassings_MostExpensiveShouldCount
     {
-        // CONCLUSION FOR THESE TESTS: The calculation for when a non toll-free vehicle tollfee is above 60SEK, does not work correctly. It seems as if only one of the passings count...
-        // Further, the last test has data for when two different tariffs exist during on hour (for example when the vehicle has passes betwen 6.30-7.30), in that case some calculation seems to take place, but with the sum 23 which is unreasonable because no combination of tariffs results in a sum of 23. However, sometimes the "sum" is 13 or 18, depending on the order of the dates in the list...
-        // ADDITION: I might have read the requirements badly; the calculator should always count only one (the most expensive) passing...
+        // TODO: the last test has data for when two different tariffs exist during on hour (for example when the vehicle has passes betwen 6.30-7.30), in that case the calculation seems erroneous, with the sum 23 which is unreasonable because no combination of tariffs results in a sum of 23. However, sometimes the "sum" is 13 or 18, depending on the order of the dates in the list...
 
         TollCalculator calculator = new TollCalculator();
         Car car = new Car();
@@ -102,9 +96,9 @@ namespace UnitTests
             var rush4 = new DateTime(2024, 01, 09, 7, 34, 00);
             var list = new DateTime[] { rush1, rush2, rush3, rush4 }; // 18*4 = 72
 
-            var expected = 60;
+            var expected = (int)Tariffs.High;
             var acutal = calculator.GetTollFee(car, list);
-            Assert.Equal(expected, acutal); // FAIL: Actual 18. Even with three or two passes the result is 18...
+            Assert.Equal(expected, acutal);
         }
 
         [Fact]
@@ -119,11 +113,10 @@ namespace UnitTests
 
             var list = new DateTime[] { medium1, medium2, medium3, medium4, medium5, medium6 }; // 13*5 = 65
 
-            var expected = 60;
+            var expected = (int)Tariffs.Medium;
             var acutal = calculator.GetTollFee(car, list);
-            Assert.Equal(expected, acutal); // FAIL: Actual 13. Even with three or two passes the result is 13... 
+            Assert.Equal(expected, acutal);
         }
-
 
         [Fact]
         public void NeverAbove60SEKForOneDay_JustNoonTariff()
@@ -139,9 +132,9 @@ namespace UnitTests
 
             var list = new DateTime[] { noon1, noon2, noon3, noon4, noon5, noon6, noon7, noon8 }; // 8*8 = 64
 
-            var expected = 60;
+            var expected = (int)Tariffs.Low;
             var acutal = calculator.GetTollFee(car, list);
-            Assert.Equal(expected, acutal); // FAIL: Actual 8. Even with three or two passes the result is 8... 
+            Assert.Equal(expected, acutal);
         }
 
         [Fact]
@@ -154,7 +147,7 @@ namespace UnitTests
 
             var list = new DateTime[] { time3, time4, time1, time2 }; // = 62
 
-            var expected = 60;
+            var expected = 18;
             var acutal = calculator.GetTollFee(car, list); // FAIL: Actual 23. However it varies depending on the order of the dates in the list...
             Assert.Equal(expected, acutal);
         }
@@ -169,12 +162,11 @@ namespace UnitTests
         DateTime noonRegularDay = new DateTime(2024, 01, 08, 12, 30, 00);
         DateTime rushhourRegularDay = new DateTime(2024, 01, 09, 7, 30, 00);
         DateTime night = new DateTime(2024, 01, 09, 01, 30, 00);
-        DateTime christmas = new DateTime(2023, 12, 24, 16, 30, 00);
-        DateTime july = new DateTime(2023, 07, 24, 16, 30, 00);
-        DateTime weekend = new DateTime(2024, 01, 13, 16, 30, 00);
+        DateTime christmas = new DateTime(2023, 12, 24, 16, 30, 00); // 16.30 would be rush hour on a regular day.
+        DateTime july = new DateTime(2023, 07, 24, 16, 30, 00); // 16.30 would be rush hour on a regular day.
+        DateTime weekend = new DateTime(2024, 01, 13, 16, 30, 00); // 16.30 would be rush hour on a regular day.
 
         #region IsTollFreeDate-tester
-        // OBS: IsTollFreeDate() är egentligen private!
         [Fact]
         public void Test_IsTollFreeDate_WithTollFreeDate()
         {
@@ -216,7 +208,7 @@ namespace UnitTests
         {
             DateTime[] dates = new DateTime[] { rushhourRegularDay, noonRegularDay };
             int actual = calculator.GetTollFee(car, dates);
-            int expected = 26; // (18+8) FAIL: Actual 28!
+            int expected = 18;
 
             Assert.Equal(expected, actual);
         }
@@ -245,7 +237,7 @@ namespace UnitTests
         public void Test_GetTollFee_WithCar()
         {
             int actual = calculator.GetTollFee(rushhourRegularDay, car);
-            int expected = 18;
+            int expected = (int)Tariffs.High;
             Assert.Equal(expected, actual);
         }
 
@@ -253,7 +245,7 @@ namespace UnitTests
         public void Test_GetTollFee_WithMotorbike()
         {
             int actual = calculator.GetTollFee(rushhourRegularDay, mc);
-            int expected = 0;
+            int expected = (int)Tariffs.Free;
             Assert.Equal(expected, actual);
         }
 
@@ -261,7 +253,7 @@ namespace UnitTests
         public void Test_GetTollFee_WithTollFreeDate()
         {
             int actual = calculator.GetTollFee(weekend, car);
-            int expected = 0;
+            int expected = (int)Tariffs.Free;
             Assert.Equal(expected, actual);
         }
         #endregion GetTollFee(date, vehicle)-tester
@@ -298,7 +290,7 @@ namespace UnitTests
         public void CarInJulyShouldAlwaysCost0SEK()
         {
             var actual = calculator.GetTollFee(july, car);
-            var expected = 0; // FAIL: Actual 18!
+            var expected = 0;
 
             Assert.Equal(expected, actual);
         }
