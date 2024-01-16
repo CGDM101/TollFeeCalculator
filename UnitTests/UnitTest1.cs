@@ -11,7 +11,7 @@ namespace UnitTests
         /// These holidays always falls on these months and days. Dates are chosen for being regular weekdays, had it not been for the holiday that year.
         /// </summary>
         [Fact]
-        public void FixedHolidyaDatesShouldAlwaysCost0SEK()
+        public void HolidayDatesShouldAlwaysCost0SEK()
         {
             var newYearsDay = new DateTime(2019, 1, 1); // a tuesday
             var valborg = new DateTime(2019, 04, 30); // a tuesday
@@ -22,13 +22,41 @@ namespace UnitTests
             var boxingDay = new DateTime(2019, 12, 26); // a thursday
             var newYearsEve = new DateTime(2019, 12, 31); // a tuesday
 
-            var dates = new DateTime[] { newYearsDay, valborg, labourDay, nationalDay, christmas, christmasDay, boxingDay, newYearsEve };
+            var ascension = new DateTime(2025, 05, 29); // a holiday that falls on different dates each year.
+
+            var dates = new DateTime[] { newYearsDay, valborg, labourDay, nationalDay, christmas, christmasDay, boxingDay, newYearsEve, ascension };
 
             var expected = 0;
             var actual = calculator.GetTollFee(car, dates);
             Assert.Equal(expected, actual);
         }
-        // TODO: Holidays with no fixed dates: Epiphany, Good Friday, Easter Monday (Easter Eve and Easter Day are already a Saturday and Sunday so they will always cost 0SEK), Midsummer's Eve, Midsummer's Day, Ascension Day, All Saint's Day)
+
+        [Fact]
+        public void Test_CalculateIfDateIsFixedHoliday()
+        {
+            var christmas = new DateTime(2019, 12, 24);
+            var notChristmas = new DateTime(2019, 12, 23);
+            var actual = calculator.CalculateIfDateIsFixedHoliday(christmas);
+            var actual2 = calculator.CalculateIfDateIsFixedHoliday(notChristmas);
+            var expected = true;
+            var expected2 = false;
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected2, actual2);
+        }
+
+        // Holidays with no fixed dates: Epiphany, Good Friday, Easter Monday (Easter Eve and Easter Day are already a Saturday and Sunday so they will always cost 0SEK), Midsummer's Eve, Midsummer's Day, Ascension Day, All Saint's Day)
+        [Fact]
+        public void Test_CalculateIfDateIsNonfixedHoliday()
+        {
+            var ascension = new DateTime(2025, 05, 29);
+            var notAscension = new DateTime(2025, 05, 28);
+            var actual = calculator.CalculateIfDateIsNonFixedHoliday(ascension);
+            var actual2 = calculator.CalculateIfDateIsNonFixedHoliday(notAscension);
+            var expected = true;
+            var expected2 = false;
+            Assert.Equal(expected, actual);
+            Assert.Equal(expected2, actual2);
+        }
 
         [Fact]
         public void JulyShouldCost0SEK()
