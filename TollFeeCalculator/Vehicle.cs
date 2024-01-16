@@ -1,6 +1,6 @@
 ﻿namespace TollFeeCalculator
 {
-    public interface Vehicle
+    public abstract class Vehicle
     {
         public bool IsTollFree { get; set; }
     }
