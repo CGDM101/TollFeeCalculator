@@ -18,14 +18,14 @@ namespace TollFeeCalculator
         /// <param name="vehicle">The vehicle that passes.</param>
         /// <param name="dates">The datetime(-s) the vehicle passes</param>
         /// <returns>An int representing the total toll fee for a vehicle that day.</returns>
-        public static int GetTollFee(Vehicle vehicle, DateTime[] dates)
+        public static int CalculateTotalTollFee(Vehicle vehicle, DateTime[] dates)
         {
             DateTime intervalStart = dates[0];
             int totalFee = 0;
             foreach (DateTime date in dates)
             {
-                int nextFee = GetTollFee(date, vehicle);
-                int tempFee = GetTollFee(intervalStart, vehicle);
+                int nextFee = GetTariff(date, vehicle);
+                int tempFee = GetTariff(intervalStart, vehicle);
 
                 long diffInMillies = date.Millisecond - intervalStart.Millisecond;
                 long minutes = diffInMillies / 1000 / 60;
@@ -62,7 +62,7 @@ namespace TollFeeCalculator
         /// <param name="time">The time the vehicle passes.</param>
         /// <param name="vehicle">The vehicle that passes.</param>
         /// <returns>An int representing the tariff in SEK for that specific time.</returns>
-        public static int GetTollFee(DateTime time, Vehicle vehicle)
+        public static int GetTariff(DateTime time, Vehicle vehicle)
         {
             if (IsTollFreeDate(time) || IsTollFreeVehicle(vehicle)) return (int)Tariffs.Free;
 

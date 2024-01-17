@@ -13,7 +13,7 @@ namespace UnitTests
             var dayBeforeAscension = new DateTime(2025, 05, 29).AddDays(-1); // a thursday
             var dayBeforeCristmasEve2021 = new DateTime(2021, 12, 24).AddDays(-1); // a tuesday
             var dayAfterBoxingDay2023 = new DateTime(2023, 12, 26).AddDays(1); // a wednesday
-
+            Assert.False(IsTollFreeDate(new DateTime(2013, 06, 05, 7, 30, 00)));
             Assert.False(IsTollFreeDate(dayBeforeCristmasEve2021));
             Assert.False(IsTollFreeDate(dayAfterBoxingDay2023));
             Assert.False(IsTollFreeDate(dayBeforeAscension));
@@ -39,7 +39,7 @@ namespace UnitTests
             var dates = new DateTime[] { newYearsDay, valborg, labourDay, nationalDay, christmas, christmasDay, boxingDay, newYearsEve, ascension };
 
             var expected = 0;
-            var actual = GetTollFee(car, dates);
+            var actual = CalculateTotalTollFee(car, dates);
             Assert.Equal(expected, actual);
         }
 
@@ -76,7 +76,7 @@ namespace UnitTests
             var julyDate2 = new DateTime(2024, 07, 02);
             var list = new DateTime[] { julyDate1, julyDate2 };
             var expected = 0;
-            var actual = GetTollFee(car, list);
+            var actual = CalculateTotalTollFee(car, list);
             Assert.Equal(expected, actual);
         }
 
@@ -87,7 +87,7 @@ namespace UnitTests
             var sunday = new DateTime(2024, 01, 14);
             var list = new DateTime[] { saturday, sunday };
             var expected = 0;
-            var actual = GetTollFee(car, list);
+            var actual = CalculateTotalTollFee(car, list);
             Assert.Equal(expected, actual);
         }
     }
@@ -108,7 +108,7 @@ namespace UnitTests
             var list = new DateTime[] { rush1, rush2, rush3, rush4 }; // 18*4 = 72
 
             var expected = (int)Tariffs.High;
-            var acutal = GetTollFee(car, list);
+            var acutal = CalculateTotalTollFee(car, list);
             Assert.Equal(expected, acutal);
         }
 
@@ -125,7 +125,7 @@ namespace UnitTests
             var list = new DateTime[] { medium1, medium2, medium3, medium4, medium5, medium6 }; // 13*5 = 65
 
             var expected = (int)Tariffs.Medium;
-            var acutal = GetTollFee(car, list);
+            var acutal = CalculateTotalTollFee(car, list);
             Assert.Equal(expected, acutal);
         }
 
@@ -144,7 +144,7 @@ namespace UnitTests
             var list = new DateTime[] { noon1, noon2, noon3, noon4, noon5, noon6, noon7, noon8 }; // 8*8 = 64
 
             var expected = (int)Tariffs.Low;
-            var acutal = GetTollFee(car, list);
+            var acutal = CalculateTotalTollFee(car, list);
             Assert.Equal(expected, acutal);
         }
 
@@ -159,7 +159,7 @@ namespace UnitTests
             var list = new DateTime[] { time3, time4, time1, time2 }; // = 62
 
             var expected = 18;
-            var acutal = GetTollFee(car, list); // FAIL: Actual 23. However it varies depending on the order of the dates in the list...
+            var acutal = CalculateTotalTollFee(car, list); // FAIL: Actual 23. However it varies depending on the order of the dates in the list...
             Assert.Equal(expected, acutal);
         }
     }
@@ -216,7 +216,7 @@ namespace UnitTests
         public void Test_GetTollFee_WithSeveralDates()
         {
             DateTime[] dates = new DateTime[] { rushhourRegularDay, noonRegularDay };
-            int actual = GetTollFee(car, dates);
+            int actual = CalculateTotalTollFee(car, dates);
             int expected = 18;
 
             Assert.Equal(expected, actual);
@@ -226,7 +226,7 @@ namespace UnitTests
         public void Test_GetTollFee_WithSeveralDates_ButTollFree()
         {
             DateTime[] dates = new DateTime[] { christmas, weekend };
-            int actual = GetTollFee(car, dates);
+            int actual = CalculateTotalTollFee(car, dates);
             int expected = 0;
             Assert.Equal(expected, actual);
         }
@@ -235,7 +235,7 @@ namespace UnitTests
         public void Test_GetTollFee_WithSeveralDates_OneTollFree()
         {
             DateTime[] dates = new DateTime[] { weekend, noonRegularDay };
-            int actual = GetTollFee(car, dates);
+            int actual = CalculateTotalTollFee(car, dates);
             int expected = 8;
             Assert.Equal(expected, actual);
         }
@@ -245,7 +245,7 @@ namespace UnitTests
         [Fact]
         public void Test_GetTollFee_WithCar()
         {
-            int actual = GetTollFee(rushhourRegularDay, car);
+            int actual = GetTariff(rushhourRegularDay, car);
             int expected = (int)Tariffs.High;
             Assert.Equal(expected, actual);
         }
@@ -253,7 +253,7 @@ namespace UnitTests
         [Fact]
         public void Test_GetTollFee_WithMotorbike()
         {
-            int actual = GetTollFee(rushhourRegularDay, mc);
+            int actual = GetTariff(rushhourRegularDay, mc);
             int expected = (int)Tariffs.Free;
             Assert.Equal(expected, actual);
         }
@@ -261,7 +261,7 @@ namespace UnitTests
         [Fact]
         public void Test_GetTollFee_WithTollFreeDate()
         {
-            int actual = GetTollFee(weekend, car);
+            int actual = GetTariff(weekend, car);
             int expected = (int)Tariffs.Free;
             Assert.Equal(expected, actual);
         }
@@ -271,7 +271,7 @@ namespace UnitTests
         [Fact]
         public void MotorbikeShouldAlwaysCost0SEK()
         {
-            var actual = GetTollFee(rushhourRegularDay, mc);
+            var actual = GetTariff(rushhourRegularDay, mc);
             var expected = 0;
 
             Assert.Equal(expected, actual);
@@ -280,7 +280,7 @@ namespace UnitTests
         [Fact]
         public void CarDuringNightShouldAlwaysCost0SEK()
         {
-            var actual = GetTollFee(night, car);
+            var actual = GetTariff(night, car);
             var expected = 0;
 
             Assert.Equal(expected, actual);
@@ -289,7 +289,7 @@ namespace UnitTests
         [Fact]
         public void CarDuringChristmasShouldAlwaysCost0SEK()
         {
-            var actual = GetTollFee(christmas, car);
+            var actual = GetTariff(christmas, car);
             var expected = 0;
 
             Assert.Equal(expected, actual);
@@ -298,7 +298,7 @@ namespace UnitTests
         [Fact]
         public void CarInJulyShouldAlwaysCost0SEK()
         {
-            var actual = GetTollFee(july, car);
+            var actual = GetTariff(july, car);
             var expected = 0;
 
             Assert.Equal(expected, actual);
@@ -307,7 +307,7 @@ namespace UnitTests
         [Fact]
         public void CarDuringWeekendshouldAlwaysCost0SEK()
         {
-            var actual = GetTollFee(weekend, car);
+            var actual = GetTariff(weekend, car);
             var expected = 0;
 
             Assert.Equal(expected, actual);
@@ -318,7 +318,7 @@ namespace UnitTests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                GetTollFee(new DateTime(2024, 02, 30, 7, 30, 00), car);
+                GetTariff(new DateTime(2024, 02, 30, 7, 30, 00), car);
             });
         }
         #endregion Random tests
