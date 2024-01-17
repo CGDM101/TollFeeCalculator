@@ -3,6 +3,36 @@ using static TollFeeCalculator.TollCalculator;
 
 namespace UnitTests
 {
+    public class TariffTests
+    {
+        Car car = new Car();
+
+        [Fact]
+        public void GetTariff_ShouldReturnCorrectValue()
+        {
+            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 6, 00, 00), car));
+            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 6, 29, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 6, 30, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 6, 59, 00), car));
+            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 7, 00, 00), car));
+            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 7, 59, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 8, 00, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 8, 29, 00), car));
+            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 8, 30, 00), car));
+            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 14, 59, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 15, 00, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 15, 29, 00), car));
+            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 15, 30, 00), car));
+            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 16, 59, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 17, 00, 00), car));
+            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 17, 59, 00), car));
+            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 18, 00, 00), car));
+            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 18, 29, 00), car));
+            Assert.Equal(0, GetTariff(new DateTime(2024, 01, 17, 18, 30, 00), car));
+            Assert.Equal(0, GetTariff(new DateTime(2024, 01, 17, 05, 59, 00), car));
+        }
+    }
+
     public class HolidayTests
     {
         Car car = new Car();
@@ -162,7 +192,17 @@ namespace UnitTests
             var acutal = CalculateTotalTollFee(car, list); // FAIL: Actual 23. However it varies depending on the order of the dates in the list...
             Assert.Equal(expected, acutal);
         }
+
+        [Fact]
+        public void ExactTime()
+        {
+            var dates = new DateTime[] { new DateTime(2024, 01, 17, 7, 30, 0), new DateTime(2024, 01, 17, 7, 30, 0) };
+            var actual = CalculateTotalTollFee(car, dates);
+            var expected = 18;
+            Assert.Equal(expected, actual); // Bug? No car can pass a toll two times at the exact same time?
+        }
     }
+
     public class RandomTests
     {
         Car car = new Car();
