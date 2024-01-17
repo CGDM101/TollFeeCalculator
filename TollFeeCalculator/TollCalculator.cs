@@ -2,7 +2,7 @@
 
 namespace TollFeeCalculator
 {
-    public class TollCalculator
+    public static class TollCalculator
     {
         /**
          * Calculate the total toll fee for one day
@@ -18,7 +18,7 @@ namespace TollFeeCalculator
         /// <param name="vehicle">The vehicle that passes.</param>
         /// <param name="dates">The datetime(-s) the vehicle passes</param>
         /// <returns>An int representing the total toll fee for a vehicle that day.</returns>
-        public int GetTollFee(Vehicle vehicle, DateTime[] dates)
+        public static int GetTollFee(Vehicle vehicle, DateTime[] dates)
         {
             DateTime intervalStart = dates[0];
             int totalFee = 0;
@@ -50,7 +50,7 @@ namespace TollFeeCalculator
         /// </summary>
         /// <param name="vehicle">The vehicle to be evaluated.</param>
         /// <returns>True or false depending on whether the vehicle is toll free.</returns>
-        public bool IsTollFreeVehicle(Vehicle vehicle)
+        public static bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle.IsTollFree) return true;
             return false;
@@ -62,7 +62,7 @@ namespace TollFeeCalculator
         /// <param name="time">The time the vehicle passes.</param>
         /// <param name="vehicle">The vehicle that passes.</param>
         /// <returns>An int representing the tariff in SEK for that specific time.</returns>
-        public int GetTollFee(DateTime time, Vehicle vehicle)
+        public static int GetTollFee(DateTime time, Vehicle vehicle)
         {
             if (IsTollFreeDate(time) || IsTollFreeVehicle(vehicle)) return (int)Tariffs.Free;
 
@@ -82,7 +82,7 @@ namespace TollFeeCalculator
         }
 
 
-        public bool CalculateIfDateIsFixedHoliday(DateTime date)
+        public static bool CalculateIfDateIsFixedHoliday(DateTime date)
         {
             if (date.Month == 01 && date.Day == 01) return true;
             if (date.Month == 04 && date.Day == 30) return true;
@@ -96,7 +96,7 @@ namespace TollFeeCalculator
             return false;
         }
 
-        public bool CalculateIfDateIsNonFixedHoliday(DateTime date)
+        public static bool CalculateIfDateIsNonFixedHoliday(DateTime date)
         {
             bool isHoliday = new SwedenPublicHoliday().IsPublicHoliday(date);
             if (isHoliday) return true;
@@ -108,7 +108,7 @@ namespace TollFeeCalculator
         /// </summary>
         /// <param name="date">The date to be evaluated.</param>
         /// <returns>True or false depending on whether the date is toll free.</returns>
-        public bool IsTollFreeDate(DateTime date)
+        public static bool IsTollFreeDate(DateTime date)
         {
             if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) return true;
             if (date.Month == 7) return true;
