@@ -20,15 +20,15 @@ namespace TollFeeCalculator
         /// <returns>An int representing the total toll fee for a vehicle that day.</returns>
         public static int CalculateTotalTollFee(Vehicle vehicle, DateTime[] dates)
         {
-            DateTime intervalStart = dates[0];
-            int totalFee = 0;
+            var intervalStart = dates[0];
+            var totalFee = 0;
             foreach (DateTime date in dates)
             {
-                int nextFee = GetTariff(date, vehicle);
-                int tempFee = GetTariff(intervalStart, vehicle);
+                var nextFee = GetTariff(date, vehicle);
+                var tempFee = GetTariff(intervalStart, vehicle);
 
-                long diffInMillies = date.Millisecond - intervalStart.Millisecond;
-                long minutes = diffInMillies / 1000 / 60;
+                var diffInMillies = date.Millisecond - intervalStart.Millisecond;
+                var minutes = diffInMillies / 1000 / 60;
 
                 if (minutes <= 60)
                 {
@@ -66,8 +66,8 @@ namespace TollFeeCalculator
         {
             if (IsTollFreeDate(time) || IsTollFreeVehicle(vehicle)) return (int)Tariffs.Free;
 
-            int hour = time.Hour;
-            int minute = time.Minute;
+            var hour = time.Hour;
+            var minute = time.Minute;
 
             if (hour == 6 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
             else if (hour == 6 && minute >= 30 && minute <= 59) return (int)Tariffs.Medium;
@@ -98,7 +98,7 @@ namespace TollFeeCalculator
 
         public static bool CalculateIfDateIsNonFixedHoliday(DateTime date)
         {
-            bool isHoliday = new SwedenPublicHoliday().IsPublicHoliday(date);
+            var isHoliday = new SwedenPublicHoliday().IsPublicHoliday(date);
             if (isHoliday) return true;
             return false;
         }
