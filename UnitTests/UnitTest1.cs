@@ -77,26 +77,16 @@ namespace UnitTests
         public void Test_CalculateIfDateIsFixedHoliday()
         {
             var christmas = new DateTime(2019, 12, 24);
-            var notChristmas = new DateTime(2019, 12, 23);
-            var actual = CalculateIfDateIsFixedHoliday(christmas);
-            var actual2 = CalculateIfDateIsFixedHoliday(notChristmas);
-            var expected = true;
-            var expected2 = false;
-            Assert.Equal(expected, actual);
-            Assert.Equal(expected2, actual2);
+            Assert.True(CalculateIfDateIsHoliday(christmas));
+            Assert.False(CalculateIfDateIsHoliday(christmas.AddDays(-1)));
         }
 
         [Fact]
         public void Test_CalculateIfDateIsNonfixedHoliday()
         {
             var ascension = new DateTime(2025, 05, 29);
-            var notAscension = new DateTime(2025, 05, 28);
-            var actual = CalculateIfDateIsNonFixedHoliday(ascension);
-            var actual2 = CalculateIfDateIsNonFixedHoliday(notAscension);
-            var expected = true;
-            var expected2 = false;
-            Assert.Equal(expected, actual);
-            Assert.Equal(expected2, actual2);
+            Assert.True(CalculateIfDateIsHoliday(ascension));
+            Assert.False(CalculateIfDateIsHoliday(ascension.AddDays(-1)));
         }
 
         [Fact]
