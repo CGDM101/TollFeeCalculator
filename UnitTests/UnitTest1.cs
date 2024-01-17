@@ -7,6 +7,18 @@ namespace UnitTests
         TollCalculator calculator = new TollCalculator();
         Car car = new Car();
 
+        [Fact]
+        public void DayAfterAndBeforeHolidayShouldNotBeTollFree()
+        {
+            var dayBeforeAscension = new DateTime(2025, 05, 29).AddDays(-1); // a thursday
+            var dayBeforeCristmasEve2021 = new DateTime(2021, 12, 24).AddDays(-1); // a tuesday
+            var dayAfterBoxingDay2023 = new DateTime(2023, 12, 26).AddDays(1); // a wednesday
+            
+            Assert.False(calculator.IsTollFreeDate(dayBeforeCristmasEve2021));
+            Assert.False(calculator.IsTollFreeDate(dayAfterBoxingDay2023));
+            Assert.False(calculator.IsTollFreeDate(dayBeforeAscension));
+        }
+
         /// <summary>
         /// These holidays always falls on these months and days. Dates are chosen for being regular weekdays, had it not been for the holiday that year.
         /// </summary>
