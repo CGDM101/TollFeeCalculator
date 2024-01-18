@@ -227,7 +227,7 @@ namespace UnitTests
         [Fact]
         public void Test_IsTollFreeVehicle_WithMotorbike()
         {
-            var result = IsTollFreeVehicle(mc);
+            var result = mc.IsTollFree;
             var expected = true;
             Assert.Equal(expected, result);
         }
@@ -235,7 +235,7 @@ namespace UnitTests
         [Fact]
         public void Test_IsTollFreeVehicle_WithCar()
         {
-            var result = IsTollFreeVehicle(car);
+            var result = car.IsTollFree;
             var expected = false;
             Assert.Equal(expected, result);
         }
