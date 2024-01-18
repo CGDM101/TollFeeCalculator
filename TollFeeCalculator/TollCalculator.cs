@@ -16,7 +16,7 @@ namespace TollFeeCalculator
         {
             var intervalStart = dates[0];
             var totalFee = 0;
-            foreach (DateTime date in dates)
+            foreach (var date in dates)
             {
                 var nextFee = GetTariff(date, vehicle);
                 var tempFee = GetTariff(intervalStart, vehicle);
@@ -58,18 +58,11 @@ namespace TollFeeCalculator
             else return (int)Tariffs.Free;
         }
 
-        public static bool CalculateIfDateIsHoliday(DateTime date)
-        {
-            var isHoliday = new SwedenPublicHoliday().IsPublicHoliday(date);
-            if (isHoliday) return true;
-            return false;
-        }
-
         public static bool IsTollFreeDate(DateTime date)
         {
             if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) return true;
             if (date.Month == 7) return true;
-            if (CalculateIfDateIsHoliday(date)) return true;
+            if (new SwedenPublicHoliday().IsPublicHoliday(date)) return true;
             return false;
         }
     }

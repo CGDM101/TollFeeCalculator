@@ -1,3 +1,4 @@
+using PublicHoliday;
 using TollFeeCalculator;
 using static TollFeeCalculator.TollCalculator;
 
@@ -77,16 +78,16 @@ namespace UnitTests
         public void Test_CalculateIfDateIsFixedHoliday()
         {
             var christmas = new DateTime(2019, 12, 24);
-            Assert.True(CalculateIfDateIsHoliday(christmas));
-            Assert.False(CalculateIfDateIsHoliday(christmas.AddDays(-1)));
+            Assert.True(new SwedenPublicHoliday().IsPublicHoliday(christmas));
+            Assert.False(new SwedenPublicHoliday().IsPublicHoliday(christmas.AddDays(-1)));
         }
 
         [Fact]
         public void Test_CalculateIfDateIsNonfixedHoliday()
         {
             var ascension = new DateTime(2025, 05, 29);
-            Assert.True(CalculateIfDateIsHoliday(ascension));
-            Assert.False(CalculateIfDateIsHoliday(ascension.AddDays(-1)));
+            Assert.True(new SwedenPublicHoliday().IsPublicHoliday(ascension));
+            Assert.False(new SwedenPublicHoliday().IsPublicHoliday(ascension.AddDays(-1)));
         }
 
         [Fact]
