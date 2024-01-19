@@ -41,7 +41,7 @@ namespace TollFeeCalculator
 
         public static int GetTariff(DateTime time, Vehicle vehicle)
         {
-            if (IsTollFreeDate(time) || !vehicle.IsTollFree) return (int)Tariffs.Free;
+            if (IsTollFreeDate(time) || vehicle.IsTollFree) return (int)Tariffs.Free;
 
             var hour = time.Hour;
             var minute = time.Minute;
