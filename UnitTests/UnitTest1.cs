@@ -98,22 +98,30 @@ namespace UnitTests
 
     public class Tests_For_CalculateTotalTollFeeMethod
     {
-        // WIP: the calculation seems erroneous, with the sum 23 which is unreasonable because no combination of tariffs results in a sum of 23. However, sometimes the "sum" is 13 or 18, depending on the order of the dates in the list...
         [Fact]
         public void HighestValueSHouldBeChosenWhenSeveralPassingsInOneHour()
         {
             Car car = new Car();
 
-            var time1 = new DateTime(2024, 01, 09, 6, 45, 00); // 13 SEK
-            var time2 = new DateTime(2024, 01, 09, 7, 15, 00); // 18
-            var time3 = new DateTime(2024, 01, 09, 6, 50, 00); // 13
-            var time4 = new DateTime(2024, 01, 09, 7, 20, 00); // 18
+            var time1 = new DateTime(2024, 01, 09, 6, 45, 00);
+            var time2 = new DateTime(2024, 01, 09, 7, 15, 00);
+            var time3 = new DateTime(2024, 01, 09, 7, 16, 00);
+            var time4 = new DateTime(2024, 01, 09, 7, 14, 00);
 
-            var list = new DateTime[] { time3, time4, time1, time2 };
+            var list = new DateTime[] { time1, time2, time3, time4 };
 
             var expected = 18;
-            var acutal = CalculateTotalTollFee(car, list); // FAIL: Actual 23. However it varies depending on the order of the dates in the list...
+            var acutal = CalculateTotalTollFee(car, list);
             Assert.Equal(expected, acutal);
+
+            // COMMENT: It seems as if the calculation is incorrect when >3 items in the list. Further, the result varies depending on order of items. This is not the case however for only two items in the list.
+
+            // 6.45 7.15 7.16 blir 23
+            // 6.45 7.15 7.16 7.14 blir 28 MEN...
+            // 7.14 7.15 7.16 6.45 (dvs har bytt plats på tid1 och tid2 i listan) blir korrekt 18!?!
+
+            // 6.45 7.15 blir 18 korrekt
+            // 7.15 6.45 blir 18 korrekt (här spelar det alltså ingen roll att vi ändrar i ordningen...)
         }
 
         [Fact]

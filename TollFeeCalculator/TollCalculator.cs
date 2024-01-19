@@ -46,16 +46,31 @@ namespace TollFeeCalculator
             var hour = time.Hour;
             var minute = time.Minute;
 
-            if (hour == 6 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
-            else if (hour == 6 && minute >= 30 && minute <= 59) return (int)Tariffs.Medium;
-            else if (hour == 7 && minute >= 0 && minute <= 59) return (int)Tariffs.High;
-            else if (hour == 8 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
-            else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return (int)Tariffs.Low;
-            else if (hour == 15 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
-            else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return (int)Tariffs.High;
-            else if (hour == 17 && minute >= 0 && minute <= 59) return (int)Tariffs.Medium;
-            else if (hour == 18 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
-            else return (int)Tariffs.Free;
+            //if (hour == 6 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
+            //else if (hour == 6 && minute >= 30 && minute <= 59) return (int)Tariffs.Medium;
+            //else if (hour == 7 && minute >= 0 && minute <= 59) return (int)Tariffs.High;
+            //else if (hour == 8 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
+            //else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return (int)Tariffs.Low;
+            //else if (hour == 15 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
+            //else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return (int)Tariffs.High;
+            //else if (hour == 17 && minute >= 0 && minute <= 59) return (int)Tariffs.Medium;
+            //else if (hour == 18 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
+            //else return (int)Tariffs.Free;
+
+            return (hour, minute) switch
+            {
+                (6, >= 0 and <= 29) => (int)Tariffs.Low,
+                (6, >= 30 and <= 59) => (int)Tariffs.Medium,
+                (7, >= 0 and <= 59) => (int)Tariffs.High,
+                (8, >= 0 and <= 29) => (int)Tariffs.Medium,
+                ( >= 8 and <= 14, >= 30 and <= 59) => (int)Tariffs.Low,
+                (15, >= 0 and <= 29) => (int)Tariffs.Medium,
+                (15, _) or (16, _) => (int)Tariffs.High,
+                (17, >= 0 and <= 59) => (int)Tariffs.Medium,
+                (18, >= 0 and <= 29) => (int)Tariffs.Low,
+                _ => (int)Tariffs.Free
+            };
+
         }
 
         public static bool IsTollFreeDate(DateTime date)
