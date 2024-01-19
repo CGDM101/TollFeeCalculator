@@ -18,8 +18,8 @@ namespace TollFeeCalculator
             var totalFee = 0;
             foreach (var date in dates)
             {
-                var nextFee = GetTariff(date, vehicle);
-                var tempFee = GetTariff(intervalStart, vehicle);
+                var nextFee = GetTariff(date, vehicle!);
+                var tempFee = GetTariff(intervalStart, vehicle!);
 
                 var diffInMillies = date.Millisecond - intervalStart.Millisecond;
                 var minutes = diffInMillies / 1000 / 60;
@@ -41,35 +41,35 @@ namespace TollFeeCalculator
 
         public static int GetTariff(DateTime time, Vehicle vehicle)
         {
-            if (IsTollFreeDate(time) || vehicle.IsTollFree) return (int)Tariffs.Free;
+            if (IsTollFreeDate(time) || !vehicle.IsTollFree) return (int)Tariffs.Free;
 
             var hour = time.Hour;
             var minute = time.Minute;
 
-            //if (hour == 6 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
-            //else if (hour == 6 && minute >= 30 && minute <= 59) return (int)Tariffs.Medium;
-            //else if (hour == 7 && minute >= 0 && minute <= 59) return (int)Tariffs.High;
-            //else if (hour == 8 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
-            //else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return (int)Tariffs.Low;
-            //else if (hour == 15 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
-            //else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return (int)Tariffs.High;
-            //else if (hour == 17 && minute >= 0 && minute <= 59) return (int)Tariffs.Medium;
-            //else if (hour == 18 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
-            //else return (int)Tariffs.Free;
+            if (hour == 6 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
+            else if (hour == 6 && minute >= 30 && minute <= 59) return (int)Tariffs.Medium;
+            else if (hour == 7 && minute >= 0 && minute <= 59) return (int)Tariffs.High;
+            else if (hour == 8 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
+            else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return (int)Tariffs.Low;
+            else if (hour == 15 && minute >= 0 && minute <= 29) return (int)Tariffs.Medium;
+            else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return (int)Tariffs.High;
+            else if (hour == 17 && minute >= 0 && minute <= 59) return (int)Tariffs.Medium;
+            else if (hour == 18 && minute >= 0 && minute <= 29) return (int)Tariffs.Low;
+            else return (int)Tariffs.Free;
 
-            return (hour, minute) switch
-            {
-                (6, >= 0 and <= 29) => (int)Tariffs.Low,
-                (6, >= 30 and <= 59) => (int)Tariffs.Medium,
-                (7, >= 0 and <= 59) => (int)Tariffs.High,
-                (8, >= 0 and <= 29) => (int)Tariffs.Medium,
-                ( >= 8 and <= 14, >= 30 and <= 59) => (int)Tariffs.Low,
-                (15, >= 0 and <= 29) => (int)Tariffs.Medium,
-                (15, _) or (16, _) => (int)Tariffs.High,
-                (17, >= 0 and <= 59) => (int)Tariffs.Medium,
-                (18, >= 0 and <= 29) => (int)Tariffs.Low,
-                _ => (int)Tariffs.Free
-            };
+            //return (hour, minute) switch
+            //{
+            //    (6, >= 0 and <= 29) => (int)Tariffs.Low,
+            //    (6, >= 30 and <= 59) => (int)Tariffs.Medium,
+            //    (7, >= 0 and <= 59) => (int)Tariffs.High,
+            //    (8, >= 0 and <= 29) => (int)Tariffs.Medium,
+            //    ( >= 8 and <= 14, >= 30 and <= 59) => (int)Tariffs.Low,
+            //    (15, >= 0 and <= 29) => (int)Tariffs.Medium,
+            //    (15, _) or (16, _) => (int)Tariffs.High,
+            //    (17, >= 0 and <= 59) => (int)Tariffs.Medium,
+            //    (18, >= 0 and <= 29) => (int)Tariffs.Low,
+            //    _ => (int)Tariffs.Free
+            //};
 
         }
 
