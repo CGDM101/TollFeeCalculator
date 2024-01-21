@@ -12,31 +12,46 @@ namespace UnitTests
         DateTime july16h30 = new DateTime(2023, 07, 24, 16, 30, 00); // 16.30 would be rush hour on a regular day.
         DateTime weekend16h30 = new DateTime(2024, 01, 13, 16, 30, 00); // 16.30 would be rush hour on a regular day.
 
-        [Fact]
-        public void GetTariff_ShouldReturnCorrectValue()
-        {
-            var car = new Car();
+        Car car = new Car();
 
-            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 6, 00, 00), car));
-            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 6, 29, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 6, 30, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 6, 59, 00), car));
-            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 7, 00, 00), car));
-            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 7, 59, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 8, 00, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 8, 29, 00), car));
-            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 8, 30, 00), car));
-            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 14, 59, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 15, 00, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 15, 29, 00), car));
-            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 15, 30, 00), car));
-            Assert.Equal(18, GetTariff(new DateTime(2024, 01, 17, 16, 59, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 17, 00, 00), car));
-            Assert.Equal(13, GetTariff(new DateTime(2024, 01, 17, 17, 59, 00), car));
-            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 18, 00, 00), car));
-            Assert.Equal(8, GetTariff(new DateTime(2024, 01, 17, 18, 29, 00), car));
-            Assert.Equal(0, GetTariff(new DateTime(2024, 01, 17, 18, 30, 00), car));
-            Assert.Equal(0, GetTariff(new DateTime(2024, 01, 17, 05, 59, 00), car));
+        [Fact]
+        public void TimesThatShouldReturn_LowTariff()
+        {
+            Assert.Equal((int)Tariffs.Low, GetTariff(new DateTime(2024, 01, 17, 6, 00, 00), car));
+            Assert.Equal((int)Tariffs.Low, GetTariff(new DateTime(2024, 01, 17, 6, 29, 00), car));
+            Assert.Equal((int)Tariffs.Low, GetTariff(new DateTime(2024, 01, 17, 8, 30, 00), car));
+            Assert.Equal((int)Tariffs.Low, GetTariff(new DateTime(2024, 01, 17, 14, 59, 00), car));
+            Assert.Equal((int)Tariffs.Low, GetTariff(new DateTime(2024, 01, 17, 18, 00, 00), car));
+            Assert.Equal((int)Tariffs.Low, GetTariff(new DateTime(2024, 01, 17, 18, 29, 00), car));
+        }
+
+        [Fact]
+        public void TimesThatShouldReturn_MediumTariff()
+        {
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 6, 30, 00), car));
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 6, 59, 00), car));
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 8, 00, 00), car));
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 8, 29, 00), car));
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 15, 00, 00), car));
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 15, 29, 00), car));
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 17, 00, 00), car));
+            Assert.Equal((int)Tariffs.Medium, GetTariff(new DateTime(2024, 01, 17, 17, 59, 00), car));
+        }
+
+        [Fact]
+        public void TimesThatShouldReturn_HighTariff()
+        {
+            Assert.Equal((int)Tariffs.High, GetTariff(new DateTime(2024, 01, 17, 7, 00, 00), car));
+            Assert.Equal((int)Tariffs.High, GetTariff(new DateTime(2024, 01, 17, 7, 59, 00), car));
+            Assert.Equal((int)Tariffs.High, GetTariff(new DateTime(2024, 01, 17, 15, 30, 00), car));
+            Assert.Equal((int)Tariffs.High, GetTariff(new DateTime(2024, 01, 17, 16, 59, 00), car));
+        }
+
+        [Fact]
+        public void TimesThatShouldReturn_FreeTariff()
+        {
+            Assert.Equal((int)Tariffs.Free, GetTariff(new DateTime(2024, 01, 17, 18, 30, 00), car));
+            Assert.Equal((int)Tariffs.Free, GetTariff(new DateTime(2024, 01, 17, 05, 59, 00), car));
         }
 
         [Fact]
